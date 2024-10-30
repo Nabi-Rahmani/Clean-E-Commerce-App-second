@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1027157129656",
+    "project_id": "e-commerce-app-5aba6",
+    "storage_bucket": "e-commerce-app-5aba6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027157129656:android:932eee0d76ada447bbb74d",
+        "android_client_info": {
+          "package_name": "com.nabi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhhrYCqIv7PS2jboiYLL_5I9DUFbG4uqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
