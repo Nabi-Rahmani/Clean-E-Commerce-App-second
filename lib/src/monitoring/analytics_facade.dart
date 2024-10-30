@@ -1,4 +1,5 @@
 import 'package:e_clean_fcm/src/monitoring/analytics_client.dart';
+import 'package:e_clean_fcm/src/monitoring/firebase_analytics_client.dart';
 import 'package:e_clean_fcm/src/monitoring/logger_analytics_client.dart';
 import 'package:flutter/foundation.dart';
 
@@ -59,16 +60,21 @@ class AnalyticsFacade implements AnalyticsClient {
 
   @override
   Future<void> resetUser() => _dispatch((c) => c.resetUser());
+
+  @override
+  Future<void> trackScreenView(String routeName, String action) => _dispatch(
+        (c) => c.trackScreenView(routeName, action),
+      );
 }
 
 @Riverpod(keepAlive: true)
 AnalyticsFacade analyticsFacade(ref) {
-  // final firebaseAnalyticsClient = ref.watch(firebaseAnalyticsClientProvider);
+  final firebaseAnalyticsClient = ref.watch(firebaseAnalyticsClientProvider);
   // final mixpanelAnalyticsClient =
   //     ref.watch(mixpanelAnalyticsClientProvider).requireValue;
-  return const AnalyticsFacade([
-    // firebaseAnalyticsClient,
+  return AnalyticsFacade([
+    firebaseAnalyticsClient,
     // mixpanelAnalyticsClient,
-    if (!kReleaseMode) LoggerAnalyticsClient(),
+    if (!kReleaseMode) const LoggerAnalyticsClient(),
   ]);
 }

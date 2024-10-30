@@ -3,6 +3,11 @@ import 'dart:developer';
 import 'package:e_clean_fcm/src/monitoring/analytics_client.dart';
 
 class LoggerAnalyticsClient implements AnalyticsClient {
+  @override
+  Future<void> trackScreenView(String routeName, String action) async {
+    log('trackScreenView($routeName, $action)', name: 'Navigation');
+  }
+
   const LoggerAnalyticsClient();
   static const _name = 'Event';
   @override

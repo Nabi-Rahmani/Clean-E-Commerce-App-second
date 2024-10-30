@@ -1,4 +1,5 @@
 abstract class AnalyticsClient {
+  Future<void> trackScreenView(String routeName, String action);
   Future<void> trackAppOpened();
   Future<void> trackNewAppOnboarding();
   Future<void> trackNewAppHome();
