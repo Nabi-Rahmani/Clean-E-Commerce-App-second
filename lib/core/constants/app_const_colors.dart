@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class AppColors {
   // https://rydmike.com/flexcolorscheme/themesplayground-latest/
   // Bahama Blue colors:
-  static const primary = Color(0xFF285C99);
+  // static const primary = Color(0xFF285C99);
+  // static const heart = Color(0xFFDD520F);
+  // static const error = Color(0xFFB1384E);
+  static const primary = Color(0xFF4585B5);
   static const heart = Color(0xFFDD520F);
   static const error = Color(0xFFB1384E);
-
   static Color greyShade200(bool isLight) =>
       isLight ? Colors.grey.shade200 : Colors.grey.shade900;
   static Color greyShade300(bool isLight) =>

@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'analytics_facade.dart';
+part of 'product_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$analyticsFacadeHash() => r'af8761d38486c651863bbf1872c8020bbd6f436e';
+String _$productUploadNotifierHash() =>
+    r'26592cccdf81a9fc46b9dd7db9dfc70b05e847d5';
 
-/// See also [analyticsFacade].
-@ProviderFor(analyticsFacade)
-final analyticsFacadeProvider = Provider<AnalyticsFacade>.internal(
-  analyticsFacade,
-  name: r'analyticsFacadeProvider',
+/// See also [ProductUploadNotifier].
+@ProviderFor(ProductUploadNotifier)
+final productUploadNotifierProvider =
+    AutoDisposeAsyncNotifierProvider<ProductUploadNotifier, void>.internal(
+  ProductUploadNotifier.new,
+  name: r'productUploadNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$analyticsFacadeHash,
+      : _$productUploadNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AnalyticsFacadeRef = ProviderRef<AnalyticsFacade>;
+typedef _$ProductUploadNotifier = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,29 +1,98 @@
-import 'dart:async';
+import 'dart:io';
 
 import 'package:e_clean_fcm/core/constants/app_const_colors.dart';
 import 'package:e_clean_fcm/core/constants/app_sizes.dart';
 import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
+import 'package:e_clean_fcm/features/auth/services/auth_notifier.dart';
+import 'package:e_clean_fcm/features/products/widgets/sellpanel.dart';
+import 'package:e_clean_fcm/features/profile/services/image_picker_notifier.dart';
+import 'package:e_clean_fcm/features/profile/widgets/get_user_data.dart';
 import 'package:e_clean_fcm/shared/custom_buttons.dart';
-import 'package:e_clean_fcm/src/monitoring/analytics_facade.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:e_clean_fcm/core/util/string_hardcode.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  void _showImagePicker(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final pickedImage = await ImagePicker().pickImage(
+                  source: ImageSource.camera,
+                  imageQuality: 100,
+                  maxHeight: 100,
+                  maxWidth: 100,
+                );
+                if (pickedImage == null) {
+                  return;
+                }
+
+                ref
+                    .read(autoStatImagePickerNotifierProvider.notifier)
+                    .setImageFile(File(pickedImage.path));
+                updateUserProfiel(ref);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Gallery'),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final pickedImage = await ImagePicker().pickImage(
+                  source: ImageSource.gallery,
+                  imageQuality: 80,
+                  maxHeight: 600,
+                  maxWidth: 600,
+                );
+                if (pickedImage == null) {
+                  return;
+                }
+                ref
+                    .read(autoStatImagePickerNotifierProvider.notifier)
+                    .setImageFile(File(pickedImage.path));
+                updateUserProfiel(ref);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> updateUserProfiel(WidgetRef ref) async {
+    final autoImage = ref.read(autoStatImagePickerNotifierProvider);
+    final auth = ref.watch(authNotifierProvider.notifier);
+    try {
+      await auth.updateUserProfile(newProfileImage: autoImage.imageFile!);
+    } catch (e) {
+      print('error when updating user profile image:$e');
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(appThemeModeNotifierProvider);
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
           Row(
             children: [
               Expanded(
                 child: Container(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                 ),
               ),
               Expanded(
@@ -45,6 +114,11 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 color: AppColors.primary,
               ),
+              child: const Column(
+                children: [
+                  Expanded(child: GetUserDetails()),
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -53,9 +127,9 @@ class ProfileScreen extends ConsumerWidget {
             right: 0,
             bottom: 0,
             child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(30),
                 ),
               ),
@@ -74,9 +148,6 @@ class ProfileScreen extends ConsumerWidget {
                           showSelectedIcon: false,
                           selected: {themeMode},
                           onSelectionChanged: (Set<ThemeMode> newSelection) {
-                            unawaited(ref
-                                .read(analyticsFacadeProvider)
-                                .trackAppUpdated());
                             ref
                                 .read(appThemeModeNotifierProvider.notifier)
                                 // ignore:avoid-unsafe-collection-methods
@@ -95,6 +166,25 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
+                  ),
+                  const Divider(
+                    color: Colors.grey,
+                  ),
+                  ListTile(
+                    title: const Text('Change Profile'),
+                    leading: const Icon(
+                      Icons.add_a_photo,
+                    ),
+                    onTap: () {
+                      _showImagePicker(context, ref);
+                    },
+                  ),
+                  const Divider(),
+                  ListTile(
+                    title: const Text('SellPanel'),
+                    onTap: () {
+                      showSellPanel(context);
+                    },
                   ),
                   AppButtons.primary(
                       text: 'Log Out',

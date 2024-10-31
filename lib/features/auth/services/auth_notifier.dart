@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use_from_same_package, unused_local_variable
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_clean_fcm/features/auth/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -112,6 +114,40 @@ class AuthNotifier extends _$AuthNotifier {
 
   void refresh() {
     state = const AuthState.initial(); // Reset state to initial
+  }
+
+  //update user profile
+  Future<void> updateUserProfile({
+    required File newProfileImage,
+  }) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      // Upload image to Firebase Storage
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('UserImages')
+          .child('${user.uid}.jpg');
+
+      final metadata = SettableMetadata(
+        contentType: 'image/jpeg',
+        customMetadata: {'uploaded-by': user.uid},
+      );
+
+      await storageRef.putFile(newProfileImage, metadata);
+      final imageUrl = await storageRef.getDownloadURL();
+
+      // Update only the imageUrl in Firestore
+      await FirebaseFirestore.instance
+          .collection('UserDetails')
+          .doc(user.uid)
+          .update({
+        'imageUrl': imageUrl,
+      });
+    } catch (e) {
+      throw Exception('Failed to update');
+    }
   }
 }
 

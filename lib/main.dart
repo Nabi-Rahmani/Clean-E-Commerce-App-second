@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:e_clean_fcm/core/themes/app_theme_data.dart';
 import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
 import 'package:e_clean_fcm/features/auth/widgets/stream_atuth.dart';
 import 'package:e_clean_fcm/firebase_options.dart';
@@ -31,8 +32,8 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(appThemeModeNotifierProvider);
     return MaterialApp(
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: AppThemeData.light(),
+      darkTheme: AppThemeData.dark(),
       themeMode: theme,
       home: const StreamAuth(),
       navigatorObservers: [

@@ -17,8 +17,10 @@ class BottomNavigations extends StatelessWidget {
           _currentIndexNotifier, // Listen for changes to the current index
       builder: (context, currentIndex, child) {
         return Scaffold(
+          // backgroundColor: Theme.of(context).colorScheme.surface,
           body: _pages[currentIndex], // Display the current page
           bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Theme.of(context).colorScheme.surface,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
@@ -30,7 +32,7 @@ class BottomNavigations extends StatelessWidget {
               ),
             ],
             currentIndex: currentIndex, // Highlight the current index
-            selectedItemColor: Colors.blue, // Color for the selected item
+            // Color for the selected item
             onTap: (index) {
               _currentIndexNotifier.value = index; // Update the current index
             },
@@ -43,6 +45,7 @@ class BottomNavigations extends StatelessWidget {
   // List of pages for the navigation
   final List<Widget> _pages = [
     const HomePage(),
-    const ProfileScreen(),
+    ProfileScreen(),
   ];
 }
+// bottom_navigations.dart
