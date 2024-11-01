@@ -6,7 +6,7 @@ part of 'sell_pandel_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sellPanelNotifierHash() => r'7775e464aacaf8e3d99ac6693b1bcbbfdd4e82ca';
+String _$sellPanelNotifierHash() => r'2e207245091418926bbaf5dca01221aaa12bf843';
 
 /// See also [SellPanelNotifier].
 @ProviderFor(SellPanelNotifier)

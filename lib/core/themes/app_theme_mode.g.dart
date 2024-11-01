@@ -7,7 +7,7 @@ part of 'app_theme_mode.dart';
 // **************************************************************************
 
 String _$appThemeModeNotifierHash() =>
-    r'768d0ee55f3a52d3787afff0a38294c1f2941e61';
+    r'd56be5a230155bf60f174ac6461020407eaf02c0';
 
 /// See also [AppThemeModeNotifier].
 @ProviderFor(AppThemeModeNotifier)

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:e_clean_fcm/src/monitoring/analytics_facade.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';

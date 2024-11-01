@@ -1,11 +1,12 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_clean_fcm/features/products/models/product_models.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 part 'product_notifier.g.dart';
@@ -19,7 +20,8 @@ class ProductUploadNotifier extends _$ProductUploadNotifier {
   Future<void> build() async {}
 
   Future<void> productUploaderToFirebase(
-      Products products, List<File> images) async {
+    Products products,
+  ) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
@@ -30,7 +32,7 @@ class ProductUploadNotifier extends _$ProductUploadNotifier {
       final List<String> imageUrls = [];
 
       // Upload multiple images
-      for (var i = 0; i < images.length; i++) {
+      for (var i = 0; i < products.imageUrls!.length; i++) {
         final storageRef = _storage
             .ref()
             .child('product')
@@ -45,7 +47,7 @@ class ProductUploadNotifier extends _$ProductUploadNotifier {
         );
 
         try {
-          await storageRef.putFile(images[i], metadata);
+          await storageRef.putFile(products.imageUrls![i], metadata);
           final url = await storageRef.getDownloadURL();
           imageUrls.add(url);
           print('Product image $i successfully uploaded');

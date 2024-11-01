@@ -15,6 +15,7 @@ class AutoStatImagePicker with _$AutoStatImagePicker {
 
 @riverpod
 class AutoStatImagePickerNotifier extends _$AutoStatImagePickerNotifier {
+  @override
   AutoStatImagePicker build() => AutoStatImagePicker();
 
   void setImageFile(File? imageFile) {

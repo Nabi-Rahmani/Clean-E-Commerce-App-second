@@ -10,7 +10,6 @@ class FirebaseAnalyticsClient implements AnalyticsClient {
   const FirebaseAnalyticsClient(this._analytics);
   final FirebaseAnalytics _analytics;
 
-  @override
   Future<void> setAnalyticsCollectionEnabled(bool enabled) async {
     await _analytics.setAnalyticsCollectionEnabled(enabled);
   }

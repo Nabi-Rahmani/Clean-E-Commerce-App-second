@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print
-
+// ignore_for_file: avoid_print, use_build_context_synchronously, no_leading_underscores_for_local_identifiers
+import 'package:e_clean_fcm/core/constants/app_sizes.dart';
+import 'package:e_clean_fcm/core/util/string_hardcode.dart';
 import 'dart:io';
 import 'package:e_clean_fcm/features/auth/widgets/validation.dart';
 import 'package:e_clean_fcm/features/products/models/product_models.dart';
@@ -9,6 +10,7 @@ import 'package:e_clean_fcm/shared/custom_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SellPanelSheetState extends ConsumerWidget {
@@ -21,6 +23,7 @@ class SellPanelSheetState extends ConsumerWidget {
   // double? _onSavePrice;
   // var _onSaveDescription = '';
   Future<void> uploadProduct(BuildContext context, WidgetRef ref) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
     final sellStat = ref.read(sellPanelNotifierProvider);
     final sellNotifier = ref.read(sellPanelNotifierProvider.notifier);
     print('Upload started');
@@ -49,16 +52,6 @@ class SellPanelSheetState extends ConsumerWidget {
         // Read updated state after saving
         final updatedState = ref.read(sellPanelNotifierProvider);
 
-        // // Verify required fields are not null/empty
-        // if (updatedState.proTitle?.isEmpty ??
-        //   {
-        //   print('Required fields are missing');
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(content: Text('Please fill all required fields')),
-        //   );
-        //   return;
-        // }
-
         print('Saved Title: ${updatedState.proTitle}');
         print('Saved Price: ${updatedState.proPrice}');
         print('Saved Description: ${updatedState.proDesciption}');
@@ -66,7 +59,7 @@ class SellPanelSheetState extends ConsumerWidget {
         sellNotifier.toggleAuthMode();
 
         final uploadedProduct = Products(
-          id: '',
+          id: _auth.currentUser!.uid,
           userId: user.uid,
           title: updatedState.proTitle!,
           description: updatedState.proDesciption!,
@@ -82,16 +75,15 @@ class SellPanelSheetState extends ConsumerWidget {
         await ref
             .read(productUploadNotifierProvider.notifier)
             .productUploaderToFirebase(
-                uploadedProduct, updatedState.proImageFile!);
+              uploadedProduct,
+            );
 
         print('Upload completed');
 
-        if (updatedState.isAuthenticaion) {
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Product uploaded successfully!')),
-          );
-        }
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Product uploaded successfully!')),
+        );
       } else {
         print('Form validation failed');
       }
@@ -111,83 +103,6 @@ class SellPanelSheetState extends ConsumerWidget {
       }
     }
   }
-  // Future<void> uploadProduct(BuildContext context, WidgetRef ref) async {
-  //   final sellStat = ref.watch(sellPanelNotifierProvider);
-  //   final sellNotifier = ref.watch(sellPanelNotifierProvider.notifier);
-  //   print('Upload started');
-  //   try {
-  //     final user = FirebaseAuth.instance.currentUser;
-  //     if (user == null) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Please login to post products')),
-  //       );
-  //       return;
-  //     }
-
-  //     if (!_formKey.currentState!.validate()) {
-  //       print('Validation failed');
-  //       return;
-  //     }
-
-  //     if (sellStat.proImageFile!.isEmpty) {
-  //       print('No images selected');
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Please select at least one image')),
-  //       );
-  //       return;
-  //     }
-
-  //     _formKey.currentState?.save();
-
-  //     print('Saved Title: ${sellStat.proTitle}');
-  //     print('Saved Price: ${sellStat.proPrice}');
-  //     print('Saved Description: ${sellStat.proDesciption}');
-  //     sellNotifier.toggleAuthMode();
-
-  //     print('Loading state set');
-
-  //     final uploadedProduct = Products(
-  //       id: '',
-  //       userId: '',
-  //       title: sellStat.proTitle ?? '',
-  //       description: sellStat.proDesciption ?? '',
-  //       price: sellStat.proPrice,
-  //       imageUrls: sellStat.proImageFile!,
-  //     );
-
-  //     print('Product object created: ${uploadedProduct.title}');
-  //     print('Created product values:');
-  //     print('Title: ${uploadedProduct.title}');
-  //     print('Price: ${uploadedProduct.price}');
-  //     print('Description: ${uploadedProduct.description}');
-  //     ref
-  //         .read(productUploadNotifierProvider.notifier)
-  //         .productUploaderToFirebase(uploadedProduct, sellStat.proImageFile!);
-
-  //     print('Upload completed');
-
-  //     if (sellStat.isAuthenticaion) {
-  //       Navigator.pop(context);
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Product uploaded successfully!')),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     print('Upload error: $e');
-  //     if (sellStat.isAuthenticaion) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text('Upload failed: ${e.toString()}'),
-  //           backgroundColor: Colors.red,
-  //         ),
-  //       );
-  //     }
-  //   } finally {
-  //     if (sellStat.isAuthenticaion) {
-  //       sellNotifier.toggleAuthMode();
-  //     }
-  //   }
-  // }
 
   Future<void> _pickImages(WidgetRef ref) async {
     final sellNotifier = ref.watch(sellPanelNotifierProvider.notifier);
@@ -312,7 +227,7 @@ class SellPanelSheetState extends ConsumerWidget {
                         child: Container(
                           height: 100,
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Column(
@@ -337,9 +252,9 @@ class SellPanelSheetState extends ConsumerWidget {
                               sellStat.setTitle(value);
                             }
                           },
-                          decoration: const InputDecoration(
-                            labelText: 'Title',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: 'Title'.hardcoded,
+                            border: const OutlineInputBorder(),
                           ),
                           validator: FormValidators.validateText,
                         ),
@@ -355,9 +270,9 @@ class SellPanelSheetState extends ConsumerWidget {
                               sellStat.setPrice(price);
                             }
                           },
-                          decoration: const InputDecoration(
-                            labelText: 'Price',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: 'Price'.hardcoded,
+                            border: const OutlineInputBorder(),
                           ),
                           validator: FormValidators.validatePrice,
                         ),
@@ -366,6 +281,7 @@ class SellPanelSheetState extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          maxLines: 3,
                           onSaved: (value) {
                             if (value != null && value.isNotEmpty) {
                               print('Saving description: $value');
@@ -374,9 +290,9 @@ class SellPanelSheetState extends ConsumerWidget {
                                   .setDescriptions(value);
                             }
                           },
-                          decoration: const InputDecoration(
-                            labelText: 'Description',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: 'Description'.hardcoded,
+                            border: const OutlineInputBorder(),
                           ),
                           validator: FormValidators.validateText,
                         ),
@@ -388,11 +304,11 @@ class SellPanelSheetState extends ConsumerWidget {
                           ),
                         ),
 
-                      const SizedBox(height: 16),
+                      const Gap(Sizes.p16),
                       // ... rest of your form fields
 
                       AppButtons.primary(
-                        text: 'Post Product',
+                        text: 'Post Product'.hardcoded,
                         onTap: () {
                           uploadProduct(context, ref);
                         },

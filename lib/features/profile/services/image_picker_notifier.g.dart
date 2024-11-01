@@ -7,7 +7,7 @@ part of 'image_picker_notifier.dart';
 // **************************************************************************
 
 String _$autoStatImagePickerNotifierHash() =>
-    r'c53709be8ac27e482bdaa29b9518dc27515e367f';
+    r'63db46894432ca77f888eff85171daf80c10a3e5';
 
 /// See also [AutoStatImagePickerNotifier].
 @ProviderFor(AutoStatImagePickerNotifier)

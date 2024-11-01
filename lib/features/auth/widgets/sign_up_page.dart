@@ -1,4 +1,6 @@
-// ignore_for_file: must_be_immutable, prefer_final_fields, unused_field
+// ignore_for_file: must_be_immutable, prefer_final_fields, unused_field, avoid_print
+import 'dart:async';
+
 import 'package:e_clean_fcm/core/util/string_hardcode.dart';
 import 'dart:io';
 import 'package:e_clean_fcm/features/auth/models/user_model.dart';
@@ -8,6 +10,7 @@ import 'package:e_clean_fcm/features/auth/widgets/image_pickers.dart';
 import 'package:e_clean_fcm/features/auth/widgets/validation.dart';
 import 'package:e_clean_fcm/shared/custom_buttons.dart';
 import 'package:e_clean_fcm/shared/custom_textfield.dart';
+import 'package:e_clean_fcm/src/monitoring/analytics_facade.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -45,6 +48,8 @@ class SignUpOrLogin extends ConsumerWidget {
             formState.email!,
             formState.password!,
           );
+      final trackUser = ref.watch(analyticsFacadeProvider);
+      unawaited(trackUser.trackAppOpened());
     } else {
       final user = UserModels(
         userid: '', // Will be set after signup

@@ -1,7 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'sell_pandel_notifier.freezed.dart';
 part 'sell_pandel_notifier.g.dart';
@@ -31,17 +32,17 @@ class SellPanelNotifier extends _$SellPanelNotifier {
   }
 
   void setTitle(String proTitle) {
-    print('Setting email: $proTitle');
+    print('Setting Title: $proTitle');
     state = state.copyWith(proTitle: proTitle);
   }
 
   void setDescriptions(String proDesciption) {
-    print('Setting email: $proDesciption');
+    print('Setting Description: $proDesciption');
     state = state.copyWith(proDesciption: proDesciption);
   }
 
   void setPrice(double proPrice) {
-    print('Setting email: $proPrice');
+    print('Setting Price: $proPrice');
     state = state.copyWith(proPrice: proPrice);
   }
 

@@ -21,7 +21,7 @@ mixin _$Products {
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   double get price => throw _privateConstructorUsedError;
-  List<File> get imageUrls => throw _privateConstructorUsedError;
+  List<File>? get imageUrls => throw _privateConstructorUsedError;
   bool get isAvailable => throw _privateConstructorUsedError;
   double get averageRating => throw _privateConstructorUsedError;
   int get reviewCount => throw _privateConstructorUsedError;
@@ -45,7 +45,7 @@ abstract class $ProductsCopyWith<$Res> {
       String title,
       String description,
       double price,
-      List<File> imageUrls,
+      List<File>? imageUrls,
       bool isAvailable,
       double averageRating,
       int reviewCount,
@@ -72,7 +72,7 @@ class _$ProductsCopyWithImpl<$Res, $Val extends Products>
     Object? title = null,
     Object? description = null,
     Object? price = null,
-    Object? imageUrls = null,
+    Object? imageUrls = freezed,
     Object? isAvailable = null,
     Object? averageRating = null,
     Object? reviewCount = null,
@@ -99,10 +99,10 @@ class _$ProductsCopyWithImpl<$Res, $Val extends Products>
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as double,
-      imageUrls: null == imageUrls
+      imageUrls: freezed == imageUrls
           ? _value.imageUrls
           : imageUrls // ignore: cast_nullable_to_non_nullable
-              as List<File>,
+              as List<File>?,
       isAvailable: null == isAvailable
           ? _value.isAvailable
           : isAvailable // ignore: cast_nullable_to_non_nullable
@@ -137,7 +137,7 @@ abstract class _$$ProductsImplCopyWith<$Res>
       String title,
       String description,
       double price,
-      List<File> imageUrls,
+      List<File>? imageUrls,
       bool isAvailable,
       double averageRating,
       int reviewCount,
@@ -162,7 +162,7 @@ class __$$ProductsImplCopyWithImpl<$Res>
     Object? title = null,
     Object? description = null,
     Object? price = null,
-    Object? imageUrls = null,
+    Object? imageUrls = freezed,
     Object? isAvailable = null,
     Object? averageRating = null,
     Object? reviewCount = null,
@@ -189,10 +189,10 @@ class __$$ProductsImplCopyWithImpl<$Res>
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as double,
-      imageUrls: null == imageUrls
+      imageUrls: freezed == imageUrls
           ? _value._imageUrls
           : imageUrls // ignore: cast_nullable_to_non_nullable
-              as List<File>,
+              as List<File>?,
       isAvailable: null == isAvailable
           ? _value.isAvailable
           : isAvailable // ignore: cast_nullable_to_non_nullable
@@ -222,7 +222,7 @@ class _$ProductsImpl implements _Products {
       required this.title,
       required this.description,
       required this.price,
-      required final List<File> imageUrls,
+      final List<File>? imageUrls,
       this.isAvailable = true,
       this.averageRating = 0.0,
       this.reviewCount = 0,
@@ -239,12 +239,14 @@ class _$ProductsImpl implements _Products {
   final String description;
   @override
   final double price;
-  final List<File> _imageUrls;
+  final List<File>? _imageUrls;
   @override
-  List<File> get imageUrls {
+  List<File>? get imageUrls {
+    final value = _imageUrls;
+    if (value == null) return null;
     if (_imageUrls is EqualUnmodifiableListView) return _imageUrls;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_imageUrls);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -317,7 +319,7 @@ abstract class _Products implements Products {
       required final String title,
       required final String description,
       required final double price,
-      required final List<File> imageUrls,
+      final List<File>? imageUrls,
       final bool isAvailable,
       final double averageRating,
       final int reviewCount,
@@ -334,7 +336,7 @@ abstract class _Products implements Products {
   @override
   double get price;
   @override
-  List<File> get imageUrls;
+  List<File>? get imageUrls;
   @override
   bool get isAvailable;
   @override

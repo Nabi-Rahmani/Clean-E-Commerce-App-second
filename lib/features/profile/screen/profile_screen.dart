@@ -1,3 +1,6 @@
+// ignore_for_file: avoid_print
+
+import 'dart:async';
 import 'dart:io';
 
 import 'package:e_clean_fcm/core/constants/app_const_colors.dart';
@@ -8,6 +11,8 @@ import 'package:e_clean_fcm/features/products/widgets/sellpanel.dart';
 import 'package:e_clean_fcm/features/profile/services/image_picker_notifier.dart';
 import 'package:e_clean_fcm/features/profile/widgets/get_user_data.dart';
 import 'package:e_clean_fcm/shared/custom_buttons.dart';
+import 'package:e_clean_fcm/src/monitoring/analytics_facade.dart';
+import 'package:e_clean_fcm/src/monitoring/firebase_analytics_client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,8 +20,8 @@ import 'package:e_clean_fcm/core/util/string_hardcode.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends ConsumerWidget {
-  ProfileScreen({super.key});
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  const ProfileScreen({super.key});
+
   void _showImagePicker(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
@@ -26,7 +31,7 @@ class ProfileScreen extends ConsumerWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
+              title: Text('Camera'.hardcoded),
               onTap: () async {
                 Navigator.pop(ctx);
                 final pickedImage = await ImagePicker().pickImage(
@@ -47,7 +52,7 @@ class ProfileScreen extends ConsumerWidget {
             ),
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
+              title: Text('Gallery'.hardcoded),
               onTap: () async {
                 Navigator.pop(ctx);
                 final pickedImage = await ImagePicker().pickImage(
@@ -83,7 +88,9 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final trackUser = ref.watch(analyticsFacadeProvider);
     final themeMode = ref.watch(appThemeModeNotifierProvider);
+    trackUser.trackScreenView('/your_screen', 'view');
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
@@ -171,24 +178,30 @@ class ProfileScreen extends ConsumerWidget {
                     color: Colors.grey,
                   ),
                   ListTile(
-                    title: const Text('Change Profile'),
+                    title: Text('Change Profile'.hardcoded),
                     leading: const Icon(
                       Icons.add_a_photo,
                     ),
                     onTap: () {
+                      unawaited(trackUser.trackAppUpdated());
                       _showImagePicker(context, ref);
                     },
                   ),
-                  const Divider(),
+                  const Divider(
+                    color: Colors.grey,
+                  ),
                   ListTile(
-                    title: const Text('SellPanel'),
+                    leading: const Icon(Icons.sell),
+                    title: Text('SellPanel'.hardcoded),
                     onTap: () {
+                      unawaited(trackUser.trackAppCreated());
                       showSellPanel(context);
                     },
                   ),
                   AppButtons.primary(
-                      text: 'Log Out',
+                      text: 'Log Out'.hardcoded,
                       onTap: () {
+                        trackUser.trackTaskCompleted(1);
                         FirebaseAuth.instance.signOut();
                       }),
                 ],

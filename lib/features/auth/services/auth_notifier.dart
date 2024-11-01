@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use_from_same_package, unused_local_variable
+// ignore_for_file: deprecated_member_use_from_same_package, unused_local_variable, avoid_print
 
 import 'dart:io';
 
@@ -101,6 +101,7 @@ class AuthNotifier extends _$AuthNotifier {
         email: email,
         password: password,
       );
+      // Example
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
