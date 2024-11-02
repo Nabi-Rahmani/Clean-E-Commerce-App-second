@@ -1,27 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_notifier.dart';
+part of 'review_screen.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$productUploadNotifierHash() =>
-    r'ab647b6de41c648e0b23033cb344458ff7b4e7bf';
+String _$reviewScreenStateHash() => r'4dda9a8ef91a0c08187b5f8c5148de7394b10c02';
 
-/// See also [ProductUploadNotifier].
-@ProviderFor(ProductUploadNotifier)
-final productUploadNotifierProvider =
-    AutoDisposeNotifierProvider<ProductUploadNotifier, AuthState>.internal(
-  ProductUploadNotifier.new,
-  name: r'productUploadNotifierProvider',
+/// See also [ReviewScreenState].
+@ProviderFor(ReviewScreenState)
+final reviewScreenStateProvider =
+    AutoDisposeNotifierProvider<ReviewScreenState, bool>.internal(
+  ReviewScreenState.new,
+  name: r'reviewScreenStateProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$productUploadNotifierHash,
+      : _$reviewScreenStateHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ProductUploadNotifier = AutoDisposeNotifier<AuthState>;
+typedef _$ReviewScreenState = AutoDisposeNotifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

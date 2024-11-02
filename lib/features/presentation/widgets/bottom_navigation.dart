@@ -1,4 +1,7 @@
 import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
+import 'package:e_clean_fcm/features/cart/screen/cart_screen.dart';
+import 'package:e_clean_fcm/features/cart/services/cart_lenght.dart';
+import 'package:e_clean_fcm/features/favorites/screens/favorite_screen.dart';
 import 'package:e_clean_fcm/features/presentation/screen/home_page.dart';
 import 'package:e_clean_fcm/features/profile/screen/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,7 @@ class BottomNavigations extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final productCount = ref.watch(currentUserProductsCountProvider);
     final currentTheme =
         ref.watch(appThemeModeNotifierProvider); // Watch the theme state
     final isDarkMode = currentTheme == ThemeMode.dark ||
@@ -46,12 +50,27 @@ class BottomNavigations extends ConsumerWidget {
               type: BottomNavigationBarType.fixed,
               showSelectedLabels: true,
               showUnselectedLabels: true,
-              items: const [
-                BottomNavigationBarItem(
+              items: [
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   label: 'Home',
                 ),
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.favorite),
+                  label: 'Favoirte',
+                ),
                 BottomNavigationBarItem(
+                  icon: Badge(
+                    label: productCount.when(
+                      data: (count) => Text(count.toString()),
+                      loading: () => const Text('...'),
+                      error: (_, __) => const Text('!'),
+                    ),
+                    child: const Icon(Icons.shopping_cart_outlined),
+                  ),
+                  label: 'Cart',
+                ),
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   label: 'Profile',
                 ),
@@ -69,6 +88,8 @@ class BottomNavigations extends ConsumerWidget {
 
   final List<Widget> _pages = [
     const HomeScreen(),
+    const FavoriteScreen(),
+    const CartScreen(),
     const ProfileScreen(),
   ];
 }

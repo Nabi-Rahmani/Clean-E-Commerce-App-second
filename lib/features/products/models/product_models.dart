@@ -10,6 +10,7 @@ class Products with _$Products {
     required String id,
     required String userId,
     required String title,
+    String? imageUrl,
     required String description,
     required double price,
     List<File>? imageUrls,

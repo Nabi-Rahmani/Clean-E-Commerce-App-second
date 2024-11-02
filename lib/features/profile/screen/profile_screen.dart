@@ -7,13 +7,14 @@ import 'package:e_clean_fcm/core/constants/app_const_colors.dart';
 import 'package:e_clean_fcm/core/constants/app_sizes.dart';
 import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
 import 'package:e_clean_fcm/features/auth/services/auth_notifier.dart';
+import 'package:e_clean_fcm/features/profile/screen/my_products_screen.dart';
 import 'package:e_clean_fcm/features/products/widgets/sellpanel.dart';
 import 'package:e_clean_fcm/features/profile/services/image_picker_notifier.dart';
 import 'package:e_clean_fcm/features/profile/widgets/get_user_data.dart';
 import 'package:e_clean_fcm/shared/custom_buttons.dart';
 import 'package:e_clean_fcm/src/monitoring/analytics_facade.dart';
-import 'package:e_clean_fcm/src/monitoring/firebase_analytics_client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:e_clean_fcm/core/util/string_hardcode.dart';
@@ -90,6 +91,8 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final trackUser = ref.watch(analyticsFacadeProvider);
     final themeMode = ref.watch(appThemeModeNotifierProvider);
+    final IsDakrMode =
+        ref.watch(appThemeModeNotifierProvider.notifier).isDarkMode;
     trackUser.trackScreenView('/your_screen', 'view');
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -198,12 +201,29 @@ class ProfileScreen extends ConsumerWidget {
                       showSellPanel(context);
                     },
                   ),
+                  const Divider(
+                    color: Colors.grey,
+                  ),
+                  ListTile(
+                    title: const Text('My Products'),
+                    leading: const Icon(
+                      Icons.shop_2,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => const MyProductsScreen()));
+                    },
+                  ),
                   AppButtons.primary(
                       text: 'Log Out'.hardcoded,
                       onTap: () {
                         trackUser.trackTaskCompleted(1);
                         FirebaseAuth.instance.signOut();
-                      }),
+                      },
+                      backgroundColor:
+                          IsDakrMode ? AppColors.heart : AppColors.primary),
                 ],
               ),
             ),

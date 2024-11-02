@@ -19,6 +19,7 @@ mixin _$Products {
   String get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   double get price => throw _privateConstructorUsedError;
   List<File>? get imageUrls => throw _privateConstructorUsedError;
@@ -43,6 +44,7 @@ abstract class $ProductsCopyWith<$Res> {
       {String id,
       String userId,
       String title,
+      String? imageUrl,
       String description,
       double price,
       List<File>? imageUrls,
@@ -70,6 +72,7 @@ class _$ProductsCopyWithImpl<$Res, $Val extends Products>
     Object? id = null,
     Object? userId = null,
     Object? title = null,
+    Object? imageUrl = freezed,
     Object? description = null,
     Object? price = null,
     Object? imageUrls = freezed,
@@ -91,6 +94,10 @@ class _$ProductsCopyWithImpl<$Res, $Val extends Products>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -135,6 +142,7 @@ abstract class _$$ProductsImplCopyWith<$Res>
       {String id,
       String userId,
       String title,
+      String? imageUrl,
       String description,
       double price,
       List<File>? imageUrls,
@@ -160,6 +168,7 @@ class __$$ProductsImplCopyWithImpl<$Res>
     Object? id = null,
     Object? userId = null,
     Object? title = null,
+    Object? imageUrl = freezed,
     Object? description = null,
     Object? price = null,
     Object? imageUrls = freezed,
@@ -181,6 +190,10 @@ class __$$ProductsImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -220,6 +233,7 @@ class _$ProductsImpl implements _Products {
       {required this.id,
       required this.userId,
       required this.title,
+      this.imageUrl,
       required this.description,
       required this.price,
       final List<File>? imageUrls,
@@ -235,6 +249,8 @@ class _$ProductsImpl implements _Products {
   final String userId;
   @override
   final String title;
+  @override
+  final String? imageUrl;
   @override
   final String description;
   @override
@@ -263,7 +279,7 @@ class _$ProductsImpl implements _Products {
 
   @override
   String toString() {
-    return 'Products(id: $id, userId: $userId, title: $title, description: $description, price: $price, imageUrls: $imageUrls, isAvailable: $isAvailable, averageRating: $averageRating, reviewCount: $reviewCount, createdAt: $createdAt)';
+    return 'Products(id: $id, userId: $userId, title: $title, imageUrl: $imageUrl, description: $description, price: $price, imageUrls: $imageUrls, isAvailable: $isAvailable, averageRating: $averageRating, reviewCount: $reviewCount, createdAt: $createdAt)';
   }
 
   @override
@@ -274,6 +290,8 @@ class _$ProductsImpl implements _Products {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.title, title) || other.title == title) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.price, price) || other.price == price) &&
@@ -295,6 +313,7 @@ class _$ProductsImpl implements _Products {
       id,
       userId,
       title,
+      imageUrl,
       description,
       price,
       const DeepCollectionEquality().hash(_imageUrls),
@@ -317,6 +336,7 @@ abstract class _Products implements Products {
       {required final String id,
       required final String userId,
       required final String title,
+      final String? imageUrl,
       required final String description,
       required final double price,
       final List<File>? imageUrls,
@@ -331,6 +351,8 @@ abstract class _Products implements Products {
   String get userId;
   @override
   String get title;
+  @override
+  String? get imageUrl;
   @override
   String get description;
   @override

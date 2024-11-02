@@ -103,13 +103,14 @@ class AppButtons {
     bool isLoading = false,
     IconData? icon,
     bool disabled = false,
+    required Color? backgroundColor,
   }) {
     return Consumer(
       builder: (context, ref, child) {
         return CustomButton(
           text: text,
           onTap: onTap,
-          backgroundColor: AppColors.greyShade500(true),
+          backgroundColor: backgroundColor,
           isLoading: isLoading,
           icon: icon,
           disabled: disabled,

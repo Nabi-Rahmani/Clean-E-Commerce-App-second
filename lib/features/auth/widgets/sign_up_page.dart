@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable, prefer_final_fields, unused_field, avoid_print
 import 'dart:async';
 
+import 'package:e_clean_fcm/core/constants/app_sizes.dart';
+import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
 import 'package:e_clean_fcm/core/util/string_hardcode.dart';
 import 'dart:io';
 import 'package:e_clean_fcm/features/auth/models/user_model.dart';
@@ -13,6 +15,7 @@ import 'package:e_clean_fcm/shared/custom_textfield.dart';
 import 'package:e_clean_fcm/src/monitoring/analytics_facade.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 class SignUpOrLogin extends ConsumerWidget {
   SignUpOrLogin({super.key});
@@ -73,6 +76,8 @@ class SignUpOrLogin extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formState = ref.watch(authFormNotifierProvider);
     final formNotifier = ref.read(authFormNotifierProvider.notifier);
+    final isDarkMode =
+        ref.watch(appThemeModeNotifierProvider.notifier).isDarkMode;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +137,9 @@ class SignUpOrLogin extends ConsumerWidget {
                 AppButtons.primary(
                   text: formState.isLogin ? 'Login' : 'Sign Up',
                   onTap: () => submitSignUpData(ref),
+                  backgroundColor: isDarkMode ? Colors.black38 : Colors.black87,
                 ),
+                const Gap(Sizes.p16),
                 GestureDetector(
                   onTap: () => formNotifier.toggleAuthMode(),
                   child: Text(

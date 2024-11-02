@@ -1,106 +1,19 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// ignore_for_file: unused_local_variable
 
-// class ProductDetailScreen extends ConsumerWidget {
-//   const ProductDetailScreen({
-//     super.key,
-//     required this.title,
-//     required this.productImages,
-//     this.description,
-//   });
-
-//   final String title;
-//   final String productImages;
-//   final String? description;
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     // Debug: Print received data
-//     print('Product Detail Screen - Title: $title');
-//     print('Product Detail Screen - Images: $productImages');
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(title),
-//       ),
-//       body: Container(
-//         decoration: const BoxDecoration(color: Colors.white),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             if (productImages.isNotEmpty) ...[
-//               Stack(
-//                 children: [
-//                   SizedBox(
-//                     height: 300,
-//                     child: PageView.builder(
-//                       itemCount: productImages.length,
-//                       itemBuilder: (context, index) {
-//                         print(
-//                             'Loading image at index $index: ${productImages[index]}');
-//                         return Image.network(
-//                           productImages[index],
-//                           fit: BoxFit.cover,
-//                           loadingBuilder: (context, child, loadingProgress) {
-//                             if (loadingProgress == null) return child;
-//                             return const Center(
-//                               child: CircularProgressIndicator(),
-//                             );
-//                           },
-//                           errorBuilder: (context, error, stackTrace) {
-//                             print('Error loading image: $error');
-//                             return Image.network(
-//                               'https://placehold.co/600x400',
-//                               fit: BoxFit.cover,
-//                             );
-//                           },
-//                         );
-//                       },
-//                     ),
-//                   ),
-//                   // Optional: Add page indicator
-//                   Positioned(
-//                     bottom: 10,
-//                     left: 0,
-//                     right: 0,
-//                     child: Row(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: List.generate(
-//                         productImages.length,
-//                         (index) => Container(
-//                           width: 8,
-//                           height: 8,
-//                           margin: const EdgeInsets.symmetric(horizontal: 4),
-//                           decoration: BoxDecoration(
-//                             shape: BoxShape.circle,
-//                             color: Colors.white.withOpacity(0.8),
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               Text('$description'),
-//               const SizedBox(height: 16),
-//               Padding(
-//                 padding: const EdgeInsets.symmetric(horizontal: 16),
-//                 child: Text(
-//                   title,
-//                   style: Theme.of(context).textTheme.bodyLarge,
-//                 ),
-//               ),
-//             ] else
-//               const Center(
-//                 child: Text('No images available'),
-//               ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+import 'package:e_clean_fcm/core/constants/app_const_colors.dart';
+import 'package:e_clean_fcm/core/constants/app_sizes.dart';
+import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
+import 'package:e_clean_fcm/features/cart/services/cart_lenght.dart';
+import 'package:e_clean_fcm/features/favorites/services/check_favorites_items.dart';
+import 'package:e_clean_fcm/features/products/models/product_models.dart';
+import 'package:e_clean_fcm/features/products/services/product_notifier.dart';
+import 'package:e_clean_fcm/features/products/widgets/revie_s.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+
+import '../../Review/screen/review_screen.dart';
 
 class ProductDetailScreen extends ConsumerWidget {
   const ProductDetailScreen({
@@ -108,32 +21,130 @@ class ProductDetailScreen extends ConsumerWidget {
     required this.title,
     required this.productImage,
     required this.price,
-    this.description,
+    required this.description,
+    required this.reviewCount,
   });
 
   final String title;
   final String productImage;
   final double price;
-  final String? description;
+  final String description;
+  final int reviewCount;
+  Future<void> submitFavoriteItems(BuildContext context, WidgetRef ref) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please login to add favorites')),
+        );
+        return;
+      }
+
+      final product = Products(
+        id: user.uid,
+        title: title,
+        description: description,
+        price: price,
+        userId: user.uid,
+        imageUrl: productImage,
+      );
+      final productUploader = ref
+          .read(productUploadNotifierProvider.notifier)
+          .uploadFavoriteItems(product);
+      ref.read(favoriteIconStateCheckProvider(title).notifier).toggleFavorite();
+      // Show success message
+      final isFavorite = ref.read(favoriteIconStateCheckProvider(title));
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              isFavorite ? 'Added to favorite' : ' Removed from favorites s'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+// ADD to Cart
+  Future<void> sumbitToCart(BuildContext context, WidgetRef ref) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please login to add favorites')),
+        );
+        return;
+      }
+
+      final product = Products(
+        id: user.uid,
+        title: title,
+        description: description,
+        price: price,
+        userId: user.uid,
+        imageUrl: productImage,
+      );
+      final productUploader = ref
+          .read(productUploadNotifierProvider.notifier)
+          .uploadToCart(product);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String selectedSize = 'S';
-
+    final productCount = ref.watch(currentUserProductsCountProvider);
+    final isFavorite = ref.watch(favoriteIconStateCheckProvider(title));
+    final isDarkMode =
+        ref.watch(appThemeModeNotifierProvider.notifier).isDarkMode;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: isDarkMode
+            ? const Color.fromARGB(255, 18, 18, 18)
+            : AppColors.primary,
         title: Text(title),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined),
-            onPressed: () {},
+          AnimatedScale(
+            scale: 1.0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.bounceInOut,
+            child: IconButton(
+              icon: Icon(
+                isFavorite
+                    ? Icons.favorite
+                    : Icons.favorite_border, // Toggle icon based on state
+                color: Colors.red,
+              ),
+              onPressed: () async {
+                submitFavoriteItems(context, ref);
+              },
+            ),
           ),
+          IconButton(
+            icon: Badge(
+              label: productCount.when(
+                data: (count) => Text(count.toString()),
+                loading: () => const Text('...'),
+                error: (_, __) => const Text('!'),
+              ),
+              child: const Icon(Icons.shopping_cart_outlined),
+            ),
+            onPressed: () {},
+          )
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Single Product Image
             if (productImage.isNotEmpty)
@@ -153,74 +164,69 @@ class ProductDetailScreen extends ConsumerWidget {
             const SizedBox(height: 16),
 
             // Product Title, Price, and Description
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
             Text(
-              '\$${price.toStringAsFixed(2)}',
+              title,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              description ?? '',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[700],
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Size Options
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Size',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
               ),
             ),
             const SizedBox(height: 8),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: ['S', 'M', 'L', 'XL'].map((size) {
-                return ChoiceChip(
-                  label: Text(size),
-                  selected: selectedSize == size,
-                  onSelected: (bool selected) {
-                    selectedSize = size;
-                  },
-                  selectedColor: Colors.blue,
-                  backgroundColor: Colors.grey[200],
-                  labelStyle: TextStyle(
-                    color: selectedSize == size ? Colors.white : Colors.black,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '\$${price.toStringAsFixed(1)}',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
                   ),
-                );
-              }).toList(),
+                ),
+                GestureDetector(
+                  onDoubleTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ct) => ProductReviewsScreen(
+                                  productUid: title,
+                                )));
+                  },
+                  child: Text(
+                    reviewCount.toStringAsFixed(0),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const Spacer(),
+            const SizedBox(height: 8),
+
+            Text(
+              description,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // Size Options
+
+            const Expanded(child: SizedBox()),
 
             // Add to Cart Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  sumbitToCart(context, ref);
+                },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.blue,
+                  backgroundColor:
+                      isDarkMode ? AppColors.heart : AppColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -234,6 +240,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 ),
               ),
             ),
+            const Gap(Sizes.p20),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:e_clean_fcm/core/constants/app_const_colors.dart';
+import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,6 +28,8 @@ class CustomFormTexField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode =
+        ref.watch(appThemeModeNotifierProvider.notifier).isDarkMode;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
@@ -37,19 +40,19 @@ class CustomFormTexField extends ConsumerWidget {
         obscureText: obscureText,
         decoration: InputDecoration(
           filled: true,
-          fillColor: AppColors.greyShade200(true),
+          fillColor: isDarkMode ? Colors.black45 : Colors.grey[150],
           prefixIcon: prefixIcon,
           hintText: hintText,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: AppColors.greyShade200(true),
+              color: isDarkMode ? Colors.black12 : Colors.white,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: AppColors.greyShade200(true),
+              color: isDarkMode ? Colors.black12 : Colors.white,
             ),
           ),
         ),

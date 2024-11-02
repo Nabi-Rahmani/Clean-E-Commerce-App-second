@@ -77,7 +77,8 @@ class _UserImagePickerState extends ConsumerState<UserImagePicker> {
 
   @override
   Widget build(BuildContext context) {
-    final IsDarkMode = ref.watch(appThemeModeNotifierProvider.notifier);
+    final IsDarkMode =
+        ref.watch(appThemeModeNotifierProvider.notifier).isDarkMode;
     return Column(
       children: [
         Stack(
@@ -90,7 +91,7 @@ class _UserImagePickerState extends ConsumerState<UserImagePicker> {
               height: 60,
               width: 60,
               child: CircleAvatar(
-                backgroundColor: AppColors.greyShade200(true),
+                backgroundColor: IsDarkMode ? AppColors.heart : Colors.black,
                 radius: 50,
                 foregroundImage: _pickedImageFile != null
                     ? FileImage(_pickedImageFile!)
@@ -109,7 +110,7 @@ class _UserImagePickerState extends ConsumerState<UserImagePicker> {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: AppColors.greyShade200(true),
+                    color: IsDarkMode ? Colors.black45 : Colors.black,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

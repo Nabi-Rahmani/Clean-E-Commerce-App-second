@@ -52,6 +52,7 @@ class ProductReceiveData extends ConsumerWidget {
           price: (data['productprice'] is num)
               ? (data['productprice'] as num).toDouble()
               : 0.0,
+          reviewCount: (data['reviewCount'] as int?) ?? 0,
         );
       },
     );

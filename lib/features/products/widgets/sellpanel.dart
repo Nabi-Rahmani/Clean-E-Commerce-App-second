@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, no_leading_underscores_for_local_identifiers
+import 'package:e_clean_fcm/core/constants/app_const_colors.dart';
 import 'package:e_clean_fcm/core/constants/app_sizes.dart';
+import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
 import 'package:e_clean_fcm/core/util/string_hardcode.dart';
 import 'dart:io';
 import 'package:e_clean_fcm/features/auth/widgets/validation.dart';
@@ -135,6 +137,8 @@ class SellPanelSheetState extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sellStat = ref.watch(sellPanelNotifierProvider.notifier);
     final sellStates = ref.watch(sellPanelNotifierProvider);
+    final isDarkMode =
+        ref.watch(appThemeModeNotifierProvider.notifier).isDarkMode;
     return DraggableScrollableSheet(
       initialChildSize: 0.9,
       minChildSize: 0.5,
@@ -308,11 +312,12 @@ class SellPanelSheetState extends ConsumerWidget {
                       // ... rest of your form fields
 
                       AppButtons.primary(
-                        text: 'Post Product'.hardcoded,
-                        onTap: () {
-                          uploadProduct(context, ref);
-                        },
-                      ),
+                          text: 'Post Product'.hardcoded,
+                          onTap: () {
+                            uploadProduct(context, ref);
+                          },
+                          backgroundColor:
+                              isDarkMode ? AppColors.heart : AppColors.primary),
                     ],
                   ),
                 ),

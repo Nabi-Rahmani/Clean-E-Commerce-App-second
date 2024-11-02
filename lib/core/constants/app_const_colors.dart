@@ -7,9 +7,9 @@ class AppColors {
   // static const primary = Color(0xFF285C99);
   // static const heart = Color(0xFFDD520F);
   // static const error = Color(0xFFB1384E);
-  static const primary = Color(0xFF4585B5);
-  static const heart = Color(0xFFDD520F);
-  static const error = Color(0xFFB1384E);
+  static const primary = Color(0xFF023047);
+  static const heart = Color(0xFFF86541);
+  static const error = Color(0xFFB00020);
   static Color greyShade200(bool isLight) =>
       isLight ? Colors.grey.shade200 : Colors.grey.shade900;
   static Color greyShade300(bool isLight) =>

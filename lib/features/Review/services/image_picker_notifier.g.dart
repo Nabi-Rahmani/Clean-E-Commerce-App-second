@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_notifier.dart';
+part of 'image_picker_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$productUploadNotifierHash() =>
-    r'ab647b6de41c648e0b23033cb344458ff7b4e7bf';
+String _$imagePickerReviewNotifierHash() =>
+    r'818ffb48fcb27a6178bf807135fa2c828b705889';
 
-/// See also [ProductUploadNotifier].
-@ProviderFor(ProductUploadNotifier)
-final productUploadNotifierProvider =
-    AutoDisposeNotifierProvider<ProductUploadNotifier, AuthState>.internal(
-  ProductUploadNotifier.new,
-  name: r'productUploadNotifierProvider',
+/// See also [ImagePickerReviewNotifier].
+@ProviderFor(ImagePickerReviewNotifier)
+final imagePickerReviewNotifierProvider =
+    AutoDisposeNotifierProvider<ImagePickerReviewNotifier, File?>.internal(
+  ImagePickerReviewNotifier.new,
+  name: r'imagePickerReviewNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$productUploadNotifierHash,
+      : _$imagePickerReviewNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ProductUploadNotifier = AutoDisposeNotifier<AuthState>;
+typedef _$ImagePickerReviewNotifier = AutoDisposeNotifier<File?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
