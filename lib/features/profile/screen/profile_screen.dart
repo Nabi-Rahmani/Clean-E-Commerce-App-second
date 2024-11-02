@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, non_constant_identifier_names
 
 import 'dart:async';
 import 'dart:io';
@@ -14,7 +14,6 @@ import 'package:e_clean_fcm/features/profile/widgets/get_user_data.dart';
 import 'package:e_clean_fcm/shared/custom_buttons.dart';
 import 'package:e_clean_fcm/src/monitoring/analytics_facade.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:e_clean_fcm/core/util/string_hardcode.dart';

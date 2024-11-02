@@ -7,7 +7,6 @@ import 'package:e_clean_fcm/features/cart/services/cart_lenght.dart';
 import 'package:e_clean_fcm/features/favorites/services/check_favorites_items.dart';
 import 'package:e_clean_fcm/features/products/models/product_models.dart';
 import 'package:e_clean_fcm/features/products/services/product_notifier.dart';
-import 'package:e_clean_fcm/features/products/widgets/revie_s.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -192,13 +191,29 @@ class ProductDetailScreen extends ConsumerWidget {
                                   productUid: title,
                                 )));
                   },
-                  child: Text(
-                    reviewCount.toStringAsFixed(0),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.orange,
-                    ),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Reviews',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor:
+                              AppColors.heart, // Color of the underline
+                          decorationThickness: 2, // Thickness of the underline
+                          color: Colors.black, // Text color
+                          fontSize: 16, // Text size
+                        ),
+                      ),
+                      const Gap(Sizes.p12),
+                      Text(
+                        reviewCount.toStringAsFixed(0),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.orange,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_clean_fcm/core/themes/app_theme_data.dart';
 import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
 import 'package:e_clean_fcm/features/auth/widgets/stream_atuth.dart';
@@ -18,7 +19,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // 1. Enable persistence
+  FirebaseFirestore.instance.settings =
+      const Settings(persistenceEnabled: true);
 
+  // 2. Configure settings
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+  );
   // Initialize Firebase Analytics
   final analytics = FirebaseAnalytics.instance;
   await analytics.setAnalyticsCollectionEnabled(true);
