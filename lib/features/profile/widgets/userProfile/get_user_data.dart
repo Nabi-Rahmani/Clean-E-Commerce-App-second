@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_clean_fcm/features/profile/services/usedetails_notifier.dart';
-import 'package:e_clean_fcm/features/profile/widgets/design_user_pic.dart';
+import 'package:e_clean_fcm/features/profile/widgets/userProfile/design_user_pic.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

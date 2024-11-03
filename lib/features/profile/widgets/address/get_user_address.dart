@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_clean_fcm/features/profile/services/address_fetch.dart';
 
-import 'package:e_clean_fcm/features/profile/widgets/user_card_design.dart';
+import 'package:e_clean_fcm/features/profile/widgets/address/user_card_design.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,6 +40,7 @@ class AddressListWidget extends ConsumerWidget {
               district: district,
               neighborhood: neighborhood,
               address: address,
+              documentId: doc.id,
             );
           },
         );

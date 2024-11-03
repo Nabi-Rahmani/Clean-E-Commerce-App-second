@@ -76,71 +76,155 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
-//
 
-// class SignUpProgress extends StatefulWidget {
-//   const SignUpProgress({super.key});
+// Simple Rating Example without any complex code
+class SimpleRatingExample extends StatefulWidget {
+  const SimpleRatingExample({super.key});
 
-//   @override
-//   _SignUpProgressState createState() => _SignUpProgressState();
-// }
+  @override
+  State<SimpleRatingExample> createState() => _SimpleRatingExampleState();
+}
 
-// class _SignUpProgressState extends State<SignUpProgress> {
-//   int _currentStep = 1; // Track the current step
+class _SimpleRatingExampleState extends State<SimpleRatingExample> {
+  // Simple variables to store our rating data
+  double averageRating = 0.0;
+  int totalReviews = 0;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//           children: [
-//             _buildStepIndicator(1, "Signup"),
-//             _buildStepIndicator(2, "Address"),
-//             _buildStepIndicator(3, "Verification"),
-//           ],
-//         ),
-//         // Add your form's PageView or content here, controlled by `_currentStep`
-//         Expanded(
-//           child: PageView(
-//             onPageChanged: (index) {
-//               setState(() {
-//                 _currentStep = index + 1;
-//               });
-//             },
-//             children: const [
-//               // Pages for each step
-//               Center(child: Text("Signup Form")),
-//               Center(child: Text("Address Form")),
-//               Center(child: Text("Verification Form")),
-//             ],
-//           ),
-//         ),
-//       ],
-//     );
-//   }
+  // Store all ratings to show distribution
+  List<int> ratings = [];
 
-//   Widget _buildStepIndicator(int step, String title) {
-//     bool isActive = step == _currentStep;
-//     return Column(
-//       children: [
-//         CircleAvatar(
-//           radius: 15,
-//           backgroundColor: isActive ? Colors.blue : Colors.grey,
-//           child: Text(
-//             step.toString(),
-//             style: const TextStyle(color: Colors.white),
-//           ),
-//         ),
-//         const SizedBox(height: 4),
-//         Text(
-//           title,
-//           style: TextStyle(
-//             color: isActive ? Colors.blue : Colors.grey,
-//             fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+  // Currently selected rating by user
+  int selectedRating = 0;
+
+  // Submit a new rating
+  void submitRating(int rating) {
+    setState(() {
+      // Add new rating to list
+      ratings.add(rating);
+
+      // Update total number of reviews
+      totalReviews = ratings.length;
+
+      // Calculate new average
+      double sum = ratings.fold(0, (prev, curr) => prev + curr);
+      averageRating = sum / totalReviews;
+
+      // Reset selected rating
+      selectedRating = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Simple Rating Demo')),
+      body: Column(
+        children: [
+          // Show current average rating
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    'Average Rating: ${averageRating.toStringAsFixed(1)}',
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                  Text('Total Reviews: $totalReviews'),
+                ],
+              ),
+            ),
+          ),
+
+          // Rating distribution
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  const Text('Rating Distribution:',
+                      style: TextStyle(fontSize: 18)),
+                  ...List.generate(5, (index) {
+                    int star = 5 - index;
+                    int count = ratings.where((r) => r == star).length;
+
+                    return Row(
+                      children: [
+                        Text('$star stars: '),
+                        Text('$count reviews'),
+                      ],
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ),
+
+          // Select rating
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  const Text('Rate this product:',
+                      style: TextStyle(fontSize: 18)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return IconButton(
+                        icon: Icon(
+                          index < selectedRating
+                              ? Icons.star
+                              : Icons.star_border,
+                          color: Colors.amber,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            selectedRating = index + 1;
+                          });
+                        },
+                      );
+                    }),
+                  ),
+                  ElevatedButton(
+                    onPressed: selectedRating == 0
+                        ? null
+                        : () => submitRating(selectedRating),
+                    child: const Text('Submit Rating'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Show last 3 ratings
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  const Text('Recent Ratings:', style: TextStyle(fontSize: 18)),
+                  ...ratings.reversed.take(3).map(
+                        (rating) => Row(
+                          children: [
+                            ...List.generate(
+                                5,
+                                (index) => Icon(
+                                      index < rating
+                                          ? Icons.star
+                                          : Icons.star_border,
+                                      size: 16,
+                                      color: Colors.amber,
+                                    )),
+                          ],
+                        ),
+                      ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

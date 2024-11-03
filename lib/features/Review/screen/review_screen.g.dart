@@ -6,7 +6,7 @@ part of 'review_screen.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$reviewScreenStateHash() => r'4dda9a8ef91a0c08187b5f8c5148de7394b10c02';
+String _$reviewScreenStateHash() => r'e826854c5665f4c4f37ce0e30d23a7f6a2cd9bc1';
 
 /// See also [ReviewScreenState].
 @ProviderFor(ReviewScreenState)

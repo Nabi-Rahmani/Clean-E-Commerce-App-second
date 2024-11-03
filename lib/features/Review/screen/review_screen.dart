@@ -5,8 +5,10 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_clean_fcm/features/Review/services/image_picker_notifier.dart';
+import 'package:e_clean_fcm/features/Review/services/rating_state.dart';
 import 'package:e_clean_fcm/features/Review/services/reveiw_sevice_notifier.dart';
 import 'package:e_clean_fcm/features/Review/services/textfeild_state.dart';
+import 'package:e_clean_fcm/features/Review/widgets/rating_statics.dart';
 import 'package:e_clean_fcm/features/Review/widgets/reviw_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class ReviewScreenState extends _$ReviewScreenState {
     String productUid,
     String comment,
     File? image,
+    double rating,
   ) async {
     if (comment.trim().isEmpty) {
       throw 'Please write a review';
@@ -35,6 +38,7 @@ class ReviewScreenState extends _$ReviewScreenState {
             productUid,
             comment,
             image,
+            rating,
           );
     } finally {
       state = false;
@@ -105,7 +109,7 @@ class ProductReviewsScreen extends ConsumerWidget {
     final textController = ref.watch(textFieldNotifierProvider.notifier);
     final selectedImage = ref.watch(imagePickerReviewNotifierProvider);
     final isLoading = ref.watch(reviewScreenStateProvider);
-
+    final currentRating = ref.watch(ratingStateProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -190,7 +194,28 @@ class ProductReviewsScreen extends ConsumerWidget {
               },
             ),
           ),
-
+//
+          Container(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Rate: '),
+                ...List.generate(5, (index) {
+                  return IconButton(
+                    onPressed: () {
+                      ref.read(ratingStateProvider.notifier).state =
+                          (index + 1).toDouble();
+                    },
+                    icon: Icon(
+                      index < currentRating ? Icons.star : Icons.star_border,
+                      color: Colors.amber,
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
           // Input section
           Container(
             decoration: BoxDecoration(
@@ -268,35 +293,44 @@ class ProductReviewsScreen extends ConsumerWidget {
                           maxLines: null,
                         ),
                       ),
+                      // Submit button
                       IconButton(
                         icon: isLoading
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              )
+                            ? const CircularProgressIndicator()
                             : const Icon(Icons.send),
                         onPressed: isLoading
                             ? null
                             : () async {
+                                // Check if rating is selected
+                                final rating = ref.read(ratingStateProvider);
+                                if (rating == 0) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Please select a rating'),
+                                    ),
+                                  );
+                                  return;
+                                }
+
                                 try {
-                                  if (textControllers.textFielController !=
-                                      null) {
-                                    await ref
-                                        .read(
-                                            reviewScreenStateProvider.notifier)
-                                        .submitReview(
-                                          productUid,
-                                          textControllers.textFielController!,
-                                          selectedImage,
-                                        );
-                                    textController.setTextControler('');
-                                    ref
-                                        .read(imagePickerReviewNotifierProvider
-                                            .notifier)
-                                        .clearImage();
-                                  }
+                                  // Submit review with rating
+                                  await ref
+                                      .read(reviewScreenStateProvider.notifier)
+                                      .submitReview(
+                                        productUid,
+                                        textControllers.textFielController!,
+                                        selectedImage,
+                                        rating,
+                                      );
+
+                                  // Clear all inputs
+                                  textController.setTextControler('');
+                                  ref
+                                      .read(imagePickerReviewNotifierProvider
+                                          .notifier)
+                                      .clearImage();
+                                  ref.read(ratingStateProvider.notifier).state =
+                                      0;
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(e.toString())),

@@ -32,24 +32,30 @@ class ReviewServices extends _$ReviewServices {
     });
   }
 
-  // Modified to handle offline image uploads
-  Future<void> addReview(String productUid, String comment, File? image) async {
+  Future<void> addReview(
+    String productUid,
+    String comment,
+    File? image,
+    double rating,
+  ) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) throw 'User not logged in';
 
-      // Create review document reference
-      final reviewRef = _firestore
-          .collection('ProductData')
-          .doc(productUid)
-          .collection('Reviews')
-          .doc(); // Generate ID
+      // 1. Start a batch write
+      final batch = _firestore.batch();
 
+      // 2. Get product reference
+      final productRef = _firestore.collection('ProductData').doc(productUid);
+
+      // 3. Create new review reference
+      final reviewRef = productRef.collection('Reviews').doc();
+
+      // 4. Handle image upload
       String? imageUrl;
       String? pendingImagePath;
 
       if (image != null) {
-        // Check if we're online before attempting upload
         try {
           final ref = _storage
               .ref()
@@ -60,32 +66,58 @@ class ReviewServices extends _$ReviewServices {
           await ref.putFile(image);
           imageUrl = await ref.getDownloadURL();
         } catch (e) {
-          // If upload fails (likely offline), store the local path
           pendingImagePath = image.path;
           print('Image upload deferred: $e');
         }
       }
 
-      // Create review data
+      // 5. Prepare review data
       final reviewData = {
         'userId': user.uid,
         'userName': user.displayName ?? 'Anonymous',
         'comment': comment,
-        'imageUrl': imageUrl,
-        'pendingImagePath': pendingImagePath,
+        'rating': rating,
+        if (imageUrl != null) 'imageUrl': imageUrl, // Only include if not null
+        if (pendingImagePath != null) 'pendingImagePath': pendingImagePath,
         'createdAt': FieldValue.serverTimestamp(),
-        'isOffline':
-            pendingImagePath != null, // Mark as offline if image pending
+        'isOffline': pendingImagePath != null,
       };
 
-      // Add the review
-      await reviewRef.set(reviewData);
+      // 6. Add review to batch
+      batch.set(reviewRef, reviewData);
 
-      // If we have a pending image, schedule it for upload when back online
+      // 7. Get current product data safely
+      final productDoc = await productRef.get();
+      final currentRating = productDoc.exists
+          ? (productDoc.data()?['averageRating'] ?? 0.0)
+          : 0.0;
+      final currentCount =
+          productDoc.exists ? (productDoc.data()?['reviewCount'] ?? 0) : 0;
+
+      // 8. Calculate new rating
+      final newCount = currentCount + 1;
+      final totalPoints = (currentRating * currentCount) + rating;
+      final newAverage = totalPoints / newCount;
+
+      // 9. Update product rating in batch
+      batch.set(
+        productRef,
+        {
+          'averageRating': newAverage,
+          'reviewCount': newCount,
+        },
+        SetOptions(merge: true), // Use merge to avoid overwriting other fields
+      );
+
+      // 10. Commit both operations
+      await batch.commit();
+
+      // 11. Handle pending image upload if needed
       if (pendingImagePath != null) {
         _scheduleImageUpload(productUid, reviewRef.id, image!);
       }
     } catch (e) {
+      print('Error adding review: $e'); // Add this for debugging
       throw 'Failed to add review: $e';
     }
   }

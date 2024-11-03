@@ -11,7 +11,7 @@ import 'package:e_clean_fcm/features/profile/screen/adderss_page.dart';
 import 'package:e_clean_fcm/features/profile/screen/my_products_screen.dart';
 import 'package:e_clean_fcm/features/products/widgets/sellpanel.dart';
 import 'package:e_clean_fcm/features/profile/services/image_picker_notifier.dart';
-import 'package:e_clean_fcm/features/profile/widgets/get_user_data.dart';
+import 'package:e_clean_fcm/features/profile/widgets/userProfile/get_user_data.dart';
 import 'package:e_clean_fcm/shared/custom_buttons.dart';
 import 'package:e_clean_fcm/src/monitoring/analytics_facade.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -6,7 +6,7 @@ part of 'reveiw_sevice_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$reviewServicesHash() => r'9a417987f0c4444b87b1b331abf5564045c77c57';
+String _$reviewServicesHash() => r'a0bc3e08ab23eb24a6e4814edc2425214f362318';
 
 /// See also [ReviewServices].
 @ProviderFor(ReviewServices)

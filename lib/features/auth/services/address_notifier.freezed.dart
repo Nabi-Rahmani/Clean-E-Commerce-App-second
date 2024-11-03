@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AddressStates {
+  bool get isLogins => throw _privateConstructorUsedError;
   String? get city => throw _privateConstructorUsedError;
   String? get district => throw _privateConstructorUsedError;
   String? get neighborhood => throw _privateConstructorUsedError;
@@ -36,7 +37,8 @@ abstract class $AddressStatesCopyWith<$Res> {
       _$AddressStatesCopyWithImpl<$Res, AddressStates>;
   @useResult
   $Res call(
-      {String? city,
+      {bool isLogins,
+      String? city,
       String? district,
       String? neighborhood,
       String? address,
@@ -58,6 +60,7 @@ class _$AddressStatesCopyWithImpl<$Res, $Val extends AddressStates>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isLogins = null,
     Object? city = freezed,
     Object? district = freezed,
     Object? neighborhood = freezed,
@@ -65,6 +68,10 @@ class _$AddressStatesCopyWithImpl<$Res, $Val extends AddressStates>
     Object? title = freezed,
   }) {
     return _then(_value.copyWith(
+      isLogins: null == isLogins
+          ? _value.isLogins
+          : isLogins // ignore: cast_nullable_to_non_nullable
+              as bool,
       city: freezed == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
@@ -98,7 +105,8 @@ abstract class _$$AddressStatesImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? city,
+      {bool isLogins,
+      String? city,
       String? district,
       String? neighborhood,
       String? address,
@@ -118,6 +126,7 @@ class __$$AddressStatesImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isLogins = null,
     Object? city = freezed,
     Object? district = freezed,
     Object? neighborhood = freezed,
@@ -125,6 +134,10 @@ class __$$AddressStatesImplCopyWithImpl<$Res>
     Object? title = freezed,
   }) {
     return _then(_$AddressStatesImpl(
+      isLogins: null == isLogins
+          ? _value.isLogins
+          : isLogins // ignore: cast_nullable_to_non_nullable
+              as bool,
       city: freezed == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
@@ -153,8 +166,16 @@ class __$$AddressStatesImplCopyWithImpl<$Res>
 
 class _$AddressStatesImpl implements _AddressStates {
   _$AddressStatesImpl(
-      {this.city, this.district, this.neighborhood, this.address, this.title});
+      {this.isLogins = false,
+      this.city,
+      this.district,
+      this.neighborhood,
+      this.address,
+      this.title});
 
+  @override
+  @JsonKey()
+  final bool isLogins;
   @override
   final String? city;
   @override
@@ -168,7 +189,7 @@ class _$AddressStatesImpl implements _AddressStates {
 
   @override
   String toString() {
-    return 'AddressStates(city: $city, district: $district, neighborhood: $neighborhood, address: $address, title: $title)';
+    return 'AddressStates(isLogins: $isLogins, city: $city, district: $district, neighborhood: $neighborhood, address: $address, title: $title)';
   }
 
   @override
@@ -176,6 +197,8 @@ class _$AddressStatesImpl implements _AddressStates {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddressStatesImpl &&
+            (identical(other.isLogins, isLogins) ||
+                other.isLogins == isLogins) &&
             (identical(other.city, city) || other.city == city) &&
             (identical(other.district, district) ||
                 other.district == district) &&
@@ -186,8 +209,8 @@ class _$AddressStatesImpl implements _AddressStates {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, city, district, neighborhood, address, title);
+  int get hashCode => Object.hash(
+      runtimeType, isLogins, city, district, neighborhood, address, title);
 
   /// Create a copy of AddressStates
   /// with the given fields replaced by the non-null parameter values.
@@ -200,12 +223,15 @@ class _$AddressStatesImpl implements _AddressStates {
 
 abstract class _AddressStates implements AddressStates {
   factory _AddressStates(
-      {final String? city,
+      {final bool isLogins,
+      final String? city,
       final String? district,
       final String? neighborhood,
       final String? address,
       final String? title}) = _$AddressStatesImpl;
 
+  @override
+  bool get isLogins;
   @override
   String? get city;
   @override

@@ -6,6 +6,7 @@ import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
 import 'package:e_clean_fcm/features/cart/services/cart_lenght.dart';
 import 'package:e_clean_fcm/features/favorites/services/check_favorites_items.dart';
 import 'package:e_clean_fcm/features/products/models/product_models.dart';
+import 'package:e_clean_fcm/features/products/screens/show_rating.dart';
 import 'package:e_clean_fcm/features/products/services/product_notifier.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -161,7 +162,11 @@ class ProductDetailScreen extends ConsumerWidget {
               const Center(child: Text('No image available')),
 
             const SizedBox(height: 16),
-
+            Expanded(
+              child: ProductRatingSummary(
+                productUid: title,
+              ),
+            ),
             // Product Title, Price, and Description
             Text(
               title,

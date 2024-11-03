@@ -1,6 +1,6 @@
 import 'package:e_clean_fcm/core/constants/app_const_colors.dart';
 import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
-import 'package:e_clean_fcm/features/profile/widgets/get_user_address.dart';
+import 'package:e_clean_fcm/features/profile/widgets/address/get_user_address.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
