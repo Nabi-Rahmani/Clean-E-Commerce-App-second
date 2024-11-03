@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'reveiw_sevice_notifier.dart';
+part of 'address_firebase_notifer.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$reviewServicesHash() => r'9a417987f0c4444b87b1b331abf5564045c77c57';
+String _$addressAuthNotifierHash() =>
+    r'84ef4bf418abdc4aa39e806c457ab5c55314a485';
 
-/// See also [ReviewServices].
-@ProviderFor(ReviewServices)
-final reviewServicesProvider =
-    AutoDisposeAsyncNotifierProvider<ReviewServices, void>.internal(
-  ReviewServices.new,
-  name: r'reviewServicesProvider',
+/// See also [AddressAuthNotifier].
+@ProviderFor(AddressAuthNotifier)
+final addressAuthNotifierProvider =
+    AutoDisposeNotifierProvider<AddressAuthNotifier, AddressAuthState>.internal(
+  AddressAuthNotifier.new,
+  name: r'addressAuthNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$reviewServicesHash,
+      : _$addressAuthNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ReviewServices = AutoDisposeAsyncNotifier<void>;
+typedef _$AddressAuthNotifier = AutoDisposeNotifier<AddressAuthState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

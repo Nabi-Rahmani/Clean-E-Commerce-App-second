@@ -86,51 +86,6 @@ class FormValidators {
     return null;
   }
 
-  // Alternative version with customizable parameters
-  static String? validatePriceCustom(
-    String? price, {
-    double min = 0.0,
-    double? max,
-    int decimalPlaces = 2,
-    String? currency,
-  }) {
-    if (price == null || price.trim().isEmpty) {
-      return 'Please enter a price';
-    }
-
-    // Remove currency symbol if present
-    String cleanPrice = price.trim();
-    if (currency != null) {
-      cleanPrice = cleanPrice.replaceAll(currency, '').trim();
-    }
-
-    // Try to parse the price
-    final double? numericPrice = double.tryParse(cleanPrice);
-    if (numericPrice == null) {
-      return 'Please enter a valid number';
-    }
-
-    // Check minimum
-    if (numericPrice < min) {
-      return 'Price must be at least ${min.toStringAsFixed(2)}';
-    }
-
-    // Check maximum if specified
-    if (max != null && numericPrice > max) {
-      return 'Price cannot exceed ${max.toStringAsFixed(2)}';
-    }
-
-    // Check decimal places
-    if (cleanPrice.contains('.')) {
-      final decimals = cleanPrice.split('.')[1];
-      if (decimals.length > decimalPlaces) {
-        return 'Price cannot have more than $decimalPlaces decimal places';
-      }
-    }
-
-    return null;
-  }
-
   static String? validateText(String? value) {
     if (value == null || value.isEmpty) {
       return 'This field cannot be empty';

@@ -44,175 +44,6 @@ class ReviewScreenState extends _$ReviewScreenState {
 
 final _fireStore = FirebaseFirestore.instance;
 
-// class ProductReviewsScreen extends ConsumerWidget {
-//   final String productUid;
-
-//   const ProductReviewsScreen({
-//     super.key,
-//     required this.productUid,
-//   });
-
-//   // final _commentController = TextEditingController();
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     final textControllers = ref.watch(textFieldNotifierProvider);
-//     final textController = ref.watch(textFieldNotifierProvider.notifier);
-//     final selectedImage = ref.watch(imagePickerReviewNotifierProvider);
-//     final isLoading = ref.watch(reviewScreenStateProvider);
-// // QuerySnapshot
-//     return Scaffold(
-//       body: Column(
-//         children: [
-//           Expanded(
-//             child: StreamBuilder<QuerySnapshot>(
-//               stream: ref
-//                   .watch(reviewServicesProvider.notifier)
-//                   .getProductReviews(productUid),
-//               builder: (context, snapshot) {
-//                 if (snapshot.hasError) {
-//                   return Center(child: Text('Error: ${snapshot.error}'));
-//                 }
-
-//                 if (snapshot.connectionState == ConnectionState.waiting) {
-//                   return const Center(child: CircularProgressIndicator());
-//                 }
-
-//                 final reviews = snapshot.data?.docs ?? [];
-//                 return ListView.builder(
-//                   reverse: true,
-//                   itemCount: reviews.length,
-//                   itemBuilder: (context, index) {
-//                     final review =
-//                         reviews[index].data() as Map<String, dynamic>;
-//                     return ReviewCard(
-//                       review: review,
-//                       onPressed: () {
-//                         _deleteMessage(context, reviews[index].id);
-//                       },
-//                     );
-//                   },
-//                 );
-//               },
-//             ),
-//           ),
-//           Container(
-//             decoration: BoxDecoration(
-//               color: Theme.of(context).cardColor,
-//               boxShadow: [
-//                 BoxShadow(
-//                   color: Colors.black.withOpacity(0.1),
-//                   blurRadius: 4,
-//                   offset: const Offset(0, -2),
-//                 ),
-//               ],
-//             ),
-//             child: Column(
-//               children: [
-//                 if (selectedImage != null)
-//                   Container(
-//                     height: 100,
-//                     width: double.infinity,
-//                     padding: const EdgeInsets.all(8),
-//                     child: Stack(
-//                       children: [
-//                         ClipRRect(
-//                           borderRadius: BorderRadius.circular(8),
-//                           child: Image.file(
-//                             selectedImage,
-//                             height: 100,
-//                             width: 100,
-//                             fit: BoxFit.cover,
-//                           ),
-//                         ),
-//                         Positioned(
-//                           right: 0,
-//                           top: 0,
-//                           child: IconButton(
-//                             icon: const Icon(Icons.close, color: Colors.white),
-//                             style: IconButton.styleFrom(
-//                               backgroundColor: Colors.black54,
-//                             ),
-//                             onPressed: () => ref
-//                                 .read(
-//                                     imagePickerReviewNotifierProvider.notifier)
-//                                 .clearImage(),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Row(
-//                     children: [
-//                       IconButton(
-//                         icon: const Icon(Icons.image),
-//                         onPressed: isLoading
-//                             ? null
-//                             : () => ref
-//                                 .read(
-//                                     imagePickerReviewNotifierProvider.notifier)
-//                                 .pickImage(),
-//                       ),
-//                       Expanded(
-//                         child: TextFormField(
-//                           onSaved: (text) =>
-//                               textController.setTextControler(text),
-//                           decoration: const InputDecoration(
-//                             hintText: 'Write a review...',
-//                             border: InputBorder.none,
-//                             contentPadding:
-//                                 EdgeInsets.symmetric(horizontal: 16),
-//                           ),
-//                           enabled: !isLoading,
-//                           maxLines: null,
-//                         ),
-//                       ),
-//                       IconButton(
-//                         icon: isLoading
-//                             ? const SizedBox(
-//                                 width: 20,
-//                                 height: 20,
-//                                 child:
-//                                     CircularProgressIndicator(strokeWidth: 2),
-//                               )
-//                             : const Icon(Icons.send),
-//                         onPressed: isLoading
-//                             ? null
-//                             : () async {
-//                                 try {
-//                                   await ref
-//                                       .read(reviewScreenStateProvider.notifier)
-//                                       .submitReview(
-//                                         productUid,
-//                                         textControllers.textFielController!,
-//                                         selectedImage,
-//                                       );
-//                                   textControllers.textFielController!;
-//                                   ref
-//                                       .read(imagePickerReviewNotifierProvider
-//                                           .notifier)
-//                                       .clearImage();
-//                                 } catch (e) {
-//                                   ScaffoldMessenger.of(context).showSnackBar(
-//                                     SnackBar(content: Text(e.toString())),
-//                                   );
-//                                 }
-//                               },
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 SizedBox(height: MediaQuery.of(context).padding.bottom),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class ProductReviewsScreen extends ConsumerWidget {
   final String productUid;
 
@@ -220,6 +51,53 @@ class ProductReviewsScreen extends ConsumerWidget {
     super.key,
     required this.productUid,
   });
+
+// Update delete function to work offline
+  void _deleteMessage(BuildContext context, String documentId) async {
+    try {
+      // Delete will be queued if offline
+      await _fireStore.collection('Reviews').doc(documentId).delete();
+
+      if (context.mounted) {
+        if (Platform.isIOS) {
+          showCupertinoDialog(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+              title: const Text('Message Deleted'),
+              content: const Text('The message has been deleted successfully.'),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: const Text('OK'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Message Deleted'),
+              content: const Text('The message has been deleted successfully.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error deleting message: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting message: $e')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -436,52 +314,5 @@ class ProductReviewsScreen extends ConsumerWidget {
         ],
       ),
     );
-  }
-}
-
-// Update delete function to work offline
-void _deleteMessage(BuildContext context, String documentId) async {
-  try {
-    // Delete will be queued if offline
-    await _fireStore.collection('Reviews').doc(documentId).delete();
-
-    if (context.mounted) {
-      if (Platform.isIOS) {
-        showCupertinoDialog(
-          context: context,
-          builder: (BuildContext context) => CupertinoAlertDialog(
-            title: const Text('Message Deleted'),
-            content: const Text('The message has been deleted successfully.'),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                child: const Text('OK'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
-      } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Message Deleted'),
-            content: const Text('The message has been deleted successfully.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
-      }
-    }
-  } catch (e) {
-    print('Error deleting message: $e');
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting message: $e')),
-      );
-    }
   }
 }

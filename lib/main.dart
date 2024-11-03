@@ -76,3 +76,71 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+//
+
+// class SignUpProgress extends StatefulWidget {
+//   const SignUpProgress({super.key});
+
+//   @override
+//   _SignUpProgressState createState() => _SignUpProgressState();
+// }
+
+// class _SignUpProgressState extends State<SignUpProgress> {
+//   int _currentStep = 1; // Track the current step
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//           children: [
+//             _buildStepIndicator(1, "Signup"),
+//             _buildStepIndicator(2, "Address"),
+//             _buildStepIndicator(3, "Verification"),
+//           ],
+//         ),
+//         // Add your form's PageView or content here, controlled by `_currentStep`
+//         Expanded(
+//           child: PageView(
+//             onPageChanged: (index) {
+//               setState(() {
+//                 _currentStep = index + 1;
+//               });
+//             },
+//             children: const [
+//               // Pages for each step
+//               Center(child: Text("Signup Form")),
+//               Center(child: Text("Address Form")),
+//               Center(child: Text("Verification Form")),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+
+//   Widget _buildStepIndicator(int step, String title) {
+//     bool isActive = step == _currentStep;
+//     return Column(
+//       children: [
+//         CircleAvatar(
+//           radius: 15,
+//           backgroundColor: isActive ? Colors.blue : Colors.grey,
+//           child: Text(
+//             step.toString(),
+//             style: const TextStyle(color: Colors.white),
+//           ),
+//         ),
+//         const SizedBox(height: 4),
+//         Text(
+//           title,
+//           style: TextStyle(
+//             color: isActive ? Colors.blue : Colors.grey,
+//             fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
