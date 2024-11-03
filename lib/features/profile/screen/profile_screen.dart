@@ -7,6 +7,7 @@ import 'package:e_clean_fcm/core/constants/app_const_colors.dart';
 import 'package:e_clean_fcm/core/constants/app_sizes.dart';
 import 'package:e_clean_fcm/core/themes/app_theme_mode.dart';
 import 'package:e_clean_fcm/features/auth/services/auth_notifier.dart';
+import 'package:e_clean_fcm/features/profile/screen/adderss_page.dart';
 import 'package:e_clean_fcm/features/profile/screen/my_products_screen.dart';
 import 'package:e_clean_fcm/features/products/widgets/sellpanel.dart';
 import 'package:e_clean_fcm/features/profile/services/image_picker_notifier.dart';
@@ -210,10 +211,27 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (ctx) => const MyProductsScreen()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => const MyProductsScreen(),
+                        ),
+                      );
                     },
+                  ),
+                  const Divider(
+                    color: Colors.grey,
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const AddressScreen();
+                      }));
+                    },
+                    title: const Text('Address'),
+                    leading: const Icon(
+                      Icons.location_on,
+                    ),
                   ),
                   AppButtons.primary(
                       text: 'Log Out'.hardcoded,

@@ -200,7 +200,7 @@ class ProductDetailScreen extends ConsumerWidget {
                           decorationColor:
                               AppColors.heart, // Color of the underline
                           decorationThickness: 2, // Thickness of the underline
-                          color: Colors.black, // Text color
+                          fontWeight: FontWeight.bold,
                           fontSize: 16, // Text size
                         ),
                       ),

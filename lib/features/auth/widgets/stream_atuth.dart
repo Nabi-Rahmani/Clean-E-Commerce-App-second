@@ -1,4 +1,4 @@
-import 'package:e_clean_fcm/features/auth/widgets/sign_up_page.dart';
+import 'package:e_clean_fcm/features/auth/home/login_page.dart';
 import 'package:e_clean_fcm/features/presentation/widgets/bottom_navigation.dart';
 import 'package:e_clean_fcm/features/presentation/widgets/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:e_clean_fcm/features/profile/widgets/user_data_desgin.dart';
@@ -50,7 +52,7 @@ class MyPublishedProducts extends ConsumerWidget {
       }
     } catch (e) {
       // Handle errors
-      // ignore: avoid_print
+
       print('Error deleting message: $e');
     }
   }

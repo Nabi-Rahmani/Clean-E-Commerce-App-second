@@ -2,7 +2,6 @@
 
 import 'package:e_clean_fcm/features/auth/pages/adress_page.dart';
 import 'package:e_clean_fcm/features/auth/pages/signup_page.dart';
-import 'package:e_clean_fcm/features/auth/pages/verifi_page.dart';
 
 import 'package:e_clean_fcm/features/auth/services/pageview_state.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +27,6 @@ class SignUpProgress extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stepState = ref.watch(pageNotifierProvider);
     final stepNotifier = ref.read(pageNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
